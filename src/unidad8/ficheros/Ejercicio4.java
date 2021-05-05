@@ -2,8 +2,8 @@ package unidad8.ficheros;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -66,13 +66,22 @@ public class Ejercicio4 {
 		File salida = new File("contaje.out");
 		// abro el flujo de datos al nuevo fichero
 		try { // manejo la salida en un bloque try para controlar las excepciones
-			FileWriter escribir = new FileWriter(salida, true);
-			// grabo los datos en el archivo conservando los anteriores
-			escribir.append("El archivo " + ruta + " contiene " + caracteres + " caracteres, " + palabras
-					+ " palabras y " + lineas + " líneas.\n");
+			FileOutputStream escribir = new FileOutputStream(salida, true);
+			// paso los datos a array de bytes
+			String texto = "El archivo " + ruta + " contiene " + caracteres + " caracteres, " + palabras
+					+ " palabras y " + lineas + " líneas.\n";
+			byte[] textoEnBytes = texto.getBytes();
+			// escribo los bytes en el archivo (al ser append = true
+			// los datos se añadirán en vez de borrar los anteriores)
+			escribir.write(textoEnBytes);
+			// cierro el flujo de datos
 			escribir.close();
+			// aviso de que la operación finalizó con éxito
 			System.out.println("Archivo contaje.out actualizado");
 		} // fin try
+		catch (FileNotFoundException fnfe) {
+			System.out.println("Archivo no encontrado.");
+		} // fin catch FNFE
 		catch (IOException ioe) {
 			System.out.println("Error E/S.");
 		} // fin IOE
